@@ -55,6 +55,13 @@ public class HomeActivity extends AppCompatActivity {
     private Sensor magSensor;
     private RegisterListener magRegisterListener;
 
+    private SensorManager stepDetectorManager;
+    private Sensor stepDetector;
+    private RegisterListener stepDetectorListener;
+    private SensorManager stepCounterManager;
+    private Sensor stepCounter;
+    private RegisterListener stepCounterListener;
+
     private float accelCurrent = 0;
     private float accel = 0;
 
@@ -153,7 +160,13 @@ public class HomeActivity extends AppCompatActivity {
                 accel = accel*0.9f + delta;
                 Log.e("Jatin", ""+accel);
                 if (Math.abs(accel) > 3){
-                    lib.executePost(ip, "action=w");
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            lib.executePost("http://" + ip, "action=w");
+                        }
+                    });
+                    thread.run();
                 }
 
 
@@ -192,6 +205,23 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+        stepCounterManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        stepCounter = stepCounterManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        stepCounterListener = new RegisterListener(new RegisterInterface() {
+            @Override
+            public void run(SensorEvent sensorEvent) {
+                Log.d("jatin", "" + sensorEvent.values[0]);
+            }
+        });
+        stepDetectorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        stepDetector = stepDetectorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        stepDetectorListener = new RegisterListener(new RegisterInterface() {
+            @Override
+            public void run(SensorEvent sensorEvent) {
+
+            }
+        });
+
 
         Button set = (Button) findViewById(R.id.set_button);
         Button forward = (Button) findViewById(R.id.forward);
@@ -282,6 +312,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         accSensorManager.registerListener(accRegisterListener, accSensor, SensorManager.SENSOR_DELAY_NORMAL);
         magSensorManager.registerListener(magRegisterListener, magSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        stepCounterManager.registerListener(stepCounterListener, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+        stepDetectorManager.registerListener(stepDetectorListener, stepDetector, SensorManager.SENSOR_DELAY_NORMAL);
 //        magSensorManager.registerListener(magRegisterListener, magSensor, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -290,6 +322,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onPause();
         accSensorManager.unregisterListener(accRegisterListener);
         magSensorManager.unregisterListener(magRegisterListener);
+        stepCounterManager.unregisterListener(stepCounterListener);
+        stepDetectorManager.unregisterListener(stepDetectorListener);
 //        magSensorManager.unregisterListener(magRegisterListener);
     }
 

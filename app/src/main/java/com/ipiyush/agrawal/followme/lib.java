@@ -60,7 +60,7 @@ public class lib {
 
         } catch (Exception e) {
 
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
 
         } finally {
