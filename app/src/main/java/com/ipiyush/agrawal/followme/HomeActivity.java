@@ -45,6 +45,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.ServerSocket;
 
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -225,6 +227,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         Button set = (Button) findViewById(R.id.set_button);
+        Button qr = (Button) findViewById(R.id.scanner);
         Button forward = (Button) findViewById(R.id.forward);
         Button right = (Button) findViewById(R.id.right);
         Button left = (Button) findViewById(R.id.left);
@@ -280,6 +283,13 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
                 thread.start();
+            }
+        });
+        qr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, QRScannerActivity.class);
+                startActivity(intent);
             }
         });
 

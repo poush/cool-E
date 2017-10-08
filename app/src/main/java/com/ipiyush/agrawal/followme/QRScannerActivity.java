@@ -35,7 +35,6 @@ public class QRScannerActivity extends AppCompatActivity implements View.OnClick
         //View objects
         buttonScan = (Button) findViewById(R.id.buttonScan);
         textViewName = (TextView) findViewById(R.id.textViewName);
-        textViewAddress = (TextView) findViewById(R.id.textViewAddress);
 
         //intializing scan object
         qrScan = new IntentIntegrator(this);
@@ -59,7 +58,6 @@ public class QRScannerActivity extends AppCompatActivity implements View.OnClick
                     JSONObject obj = new JSONObject(result.getContents());
                     //setting values to textviews
                     textViewName.setText(obj.getString("name"));
-                    textViewAddress.setText(obj.getString("address"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     //if control comes here
@@ -67,6 +65,8 @@ public class QRScannerActivity extends AppCompatActivity implements View.OnClick
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
                     Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(QRScannerActivity.this, HomeActivity.class);
+                    startActivity(intent);
                 }
             }
         } else {
