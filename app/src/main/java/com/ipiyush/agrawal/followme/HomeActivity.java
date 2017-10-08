@@ -160,13 +160,14 @@ public class HomeActivity extends AppCompatActivity {
                 accel = accel*0.9f + delta;
                 Log.e("Jatin", ""+accel);
                 if (Math.abs(accel) > 3){
+                    Log.e("jatin", "yo yo");
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            lib.executePost("http://" + ip, "action=w");
+                            lib.executePost("http://"+ip, "action=w");
                         }
                     });
-                    thread.run();
+                    thread.start();
                 }
 
 
